@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ninho | Gestão de Salário Maternidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEAF3;--surface:#FFFFFF;--surface2:#F4F1F8;--line:#D8D2E2;
+  --ink:#1F1B33;--muted:#544E68;--muted2:#8A84A0;
+  --plum:#5B2A6E;--plum-soft:#E6D8EF;
+  --rose:#A8355E;--rose-soft:#F7D9E4;
+  --sage:#1B6343;--sage-soft:#D2ECDD;
+  --honey:#7E4D00;--honey-soft:#F7E3BC;
+  --red:#A6261F;--red-soft:#F7D6D4;
+  --overlay:rgba(36,32,58,.38);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16141E;--surface:#211E2C;--surface2:#1B1925;--line:#353047;
+    --ink:#EFEBF6;--muted:#A9A2BE;--muted2:#7C7692;
+    --plum:#C7A0DA;--on-plum:#24113022;--plum-soft:#33263F;
+    --rose:#EE8FB0;--rose-soft:#3B2431;
+    --sage:#6FCB9D;--sage-soft:#1D3329;
+    --honey:#E5B157;--honey-soft:#3A2E17;
+    --red:#F37C76;--red-soft:#3E2021;
+    --overlay:rgba(0,0,0,.55);
+    color-scheme:dark;
+  }
+  :root:not([data-theme="light"]) .btn.primary{color:#1E1328}
+}
+:root[data-theme="dark"]{
+  --bg:#16141E;--surface:#211E2C;--surface2:#1B1925;--line:#353047;
+  --ink:#EFEBF6;--muted:#A9A2BE;--muted2:#7C7692;
+  --plum:#C7A0DA;--plum-soft:#33263F;
+  --rose:#EE8FB0;--rose-soft:#3B2431;
+  --sage:#6FCB9D;--sage-soft:#1D3329;
+  --honey:#E5B157;--honey-soft:#3A2E17;
+  --red:#F37C76;--red-soft:#3E2021;
+  --overlay:rgba(0,0,0,.55);color-scheme:dark;
+}
+:root[data-theme="dark"] .btn.primary{color:#1E1328}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque','Figtree',system-ui,sans-serif;margin:0;letter-spacing:-.015em;line-height:1.15}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+a{color:inherit}
+
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;padding:26px 16px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 22px}
+.brand b{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.brand small{display:block;color:var(--muted);font-size:12px;line-height:1.3}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;border:0;background:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:600;color:var(--muted)}
+.nav:hover{background:var(--surface2);color:var(--ink)}
+.nav.on{background:var(--plum-soft);color:var(--plum);font-weight:700}
+.nav .badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px}
+.side-foot{margin-top:auto;padding:12px;border-radius:12px;background:var(--surface2);font-size:12.5px;color:var(--muted)}
+.side-foot strong{color:var(--ink);display:block;margin-bottom:2px}
+
+.main{padding:34px 40px 64px;min-width:0;max-width:1400px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.page-head h1{font-size:32px;font-weight:700}
+.sub{color:var(--muted);margin-top:6px;max-width:62ch}
+.sec{font-size:17px;font-weight:700;margin-bottom:12px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;border:1px solid var(--line);background:var(--surface);padding:9px 15px;border-radius:10px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--muted2)}
+.btn.primary{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.wa{background:var(--sage-soft);color:var(--sage);border-color:transparent}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.link{border:0;background:none;padding:0;cursor:pointer;font-weight:700;text-align:left}
+.link:hover{text-decoration:underline}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.pad{padding:20px 22px}
+.stack{display:flex;flex-direction:column;gap:20px}
+
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.chip.ok,.chip.warn,.chip.bad,.chip.info,.chip.rose{border-color:transparent}
+.chip.ok{background:var(--sage-soft);color:var(--sage)}
+.chip.warn{background:var(--honey-soft);color:var(--honey)}
+.chip.bad{background:var(--red-soft);color:var(--red)}
+.chip.info{background:var(--plum-soft);color:var(--plum)}
+.chip.rose{background:var(--rose-soft);color:var(--rose)}
+
+/* Hoje */
+.hoje{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:24px;align-items:start}
+.ra{display:grid;grid-template-columns:4px minmax(0,1fr) auto;gap:16px;padding:16px 18px;border-top:1px solid var(--line);align-items:center}
+.ra:first-child{border-top:0}
+.ra .mark{align-self:stretch;border-radius:4px;background:var(--muted2)}
+.t-atrasado .mark{background:var(--red)}.t-cobranca .mark{background:var(--sage)}.t-das .mark{background:var(--honey)}.t-parto .mark{background:var(--rose)}.t-inss .mark{background:var(--plum)}
+.ra-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.ra p{color:var(--muted);font-size:14px}
+.ra-act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.empty{padding:36px 22px;text-align:center;color:var(--muted)}
+.empty strong{display:block;color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;font-size:18px;margin-bottom:4px}
+
+.big{font-family:'Bricolage Grotesque',sans-serif;font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0;border-top:1px dashed var(--line)}
+.kv:first-of-type{border-top:0}
+.kv span:first-child{color:var(--muted)}
+.prog{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;margin:12px 0 14px;border:1px solid var(--line)}
+.prog i{display:block;height:100%;background:var(--sage);border-radius:99px}
+
+.weeks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:end;height:110px;margin:6px 0 8px}
+.wk{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.wk i{display:block;width:100%;max-width:38px;border-radius:8px 8px 3px 3px;background:var(--rose-soft);border:1px solid var(--rose)}
+.wk b{font-size:13px}
+.wk small{font-size:11px;color:var(--muted);text-align:center;line-height:1.2}
+.names{font-size:13px;color:var(--muted);margin-top:6px}
+.names span{color:var(--ink);font-weight:600}
+
+.sbar{display:grid;grid-template-columns:132px 1fr 22px;gap:10px;align-items:center;font-size:13px;padding:4px 0;cursor:pointer;border:0;background:none;width:100%;text-align:left}
+.sbar:hover span:first-child{color:var(--ink)}
+.sbar span:first-child{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbar .track{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.sbar .track i{display:block;height:100%;border-radius:99px}
+.sbar b{text-align:right}
+
+/* Anel de gestação */
+.ring{--p:0;--c:var(--rose);flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.ring span{width:33px;height:33px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-size:11px;font-weight:700;line-height:1;color:var(--ink)}
+.ring.lg{width:64px;height:64px}
+.ring.lg span{width:52px;height:52px;font-size:14px}
+
+/* Funil */
+.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;scroll-snap-type:x proximity}
+.col{flex:0 0 264px;scroll-snap-align:start;background:var(--surface2);border:1px solid var(--line);border-top:4px solid var(--g);border-radius:14px;padding:12px;min-height:380px;transition:background .15s}
+.col.over{background:var(--plum-soft)}
+.col h3{font-size:14.5px;display:flex;justify-content:space-between;gap:8px;align-items:center;padding:2px 2px 4px}
+.col h3 span{font-family:'Figtree',sans-serif;font-size:12px;font-weight:700;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:0 8px}
+.kcard{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin-top:9px;cursor:grab;text-align:left;width:100%}
+.kcard:hover{border-color:var(--muted2)}
+.kcard.dragging{opacity:.45}
+.kcard strong{display:block;font-size:14px;line-height:1.3}
+.kcard small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.kcard .flag{color:var(--red);font-weight:700}
+.empty-col{font-size:13px;color:var(--muted);padding:14px 4px}
+
+/* Clientes */
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.input,.select{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;min-width:0}
+.tools .input{flex:1 1 240px}
+.crow{display:grid;grid-template-columns:42px minmax(0,1.6fr) minmax(0,1.2fr) minmax(0,.9fr) minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 18px;border-top:1px solid var(--line);cursor:pointer}
+.crow:first-child{border-top:0}
+.crow:hover{background:var(--surface2)}
+.crow small{display:block;color:var(--muted);font-size:12.5px}
+.muted{color:var(--muted)}
+
+/* Tabelas */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tab{border:0;background:none;padding:10px 14px;cursor:pointer;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab.on{color:var(--plum);border-bottom-color:var(--plum)}
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:12.5px;font-weight:600;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.tot{padding:14px 18px}
+.tot span{font-size:13px;color:var(--muted)}
+.tot b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:24px;letter-spacing:-.01em}
+
+/* Parceiros */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start}
+.prow{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.prow small{display:block;color:var(--muted);font-size:12.5px}
+.form-inline{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.form-inline .full{grid-column:1/-1}
+
+/* Gaveta da cliente */
+.drawer-wrap{position:fixed;inset:0;background:var(--overlay);z-index:50;display:flex;justify-content:flex-end}
+.drawer-wrap[hidden]{display:none}
+.drawer{width:min(600px,100%);height:100%;background:var(--surface);overflow-y:auto;padding:calc(22px + env(safe-area-inset-top,0px)) 26px calc(40px + env(safe-area-inset-bottom,0px));animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+.dhead{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+.dhead h2{font-size:24px}
+.dhead .x{margin-left:auto;align-self:flex-start}
+.dmove{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.dmove label{font-size:13px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.f label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:3px}
+.f .v{font-weight:500;word-break:break-word}
+.f.full{grid-column:1/-1}
+.f .input,.f .select{width:100%}
+.block{margin-top:24px}
+.block h3{font-size:15.5px;margin-bottom:10px}
+.senha{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.senha code{font-family:'Figtree',sans-serif;font-weight:700;letter-spacing:.08em;flex:1}
+.note{font-size:12.5px;color:var(--muted);margin-top:6px}
+.doc{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.doc:first-of-type{border-top:0}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dot.ok{background:var(--sage)}
+.doc small{display:block;font-size:12.5px;color:var(--muted)}
+.folder{display:flex;gap:10px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-bottom:6px}
+.prc{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.prc:first-of-type{border-top:0}
+.prc small{display:block;color:var(--muted);font-size:12.5px}
+.split{font-size:12.5px;color:var(--muted);margin-top:2px}
+.log{padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.log:first-child{border-top:0}
+.log small{display:block;color:var(--muted);font-size:12px}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:var(--overlay);z-index:60;display:grid;place-items:center;padding:16px}
+.modal[hidden]{display:none}
+.mbox{background:var(--surface);border-radius:18px;padding:24px;width:min(560px,100%);max-height:92%;overflow-y:auto}
+.mbox h2{font-size:22px;margin-bottom:4px}
+.mbox .sub{margin-bottom:18px}
+.mact{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:12px}
+.check input{margin-top:3px}
+.err{color:var(--red);font-size:13px;margin-top:10px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;z-index:80;max-width:min(520px,92vw);box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.toast[hidden]{display:none}
+
+.theme-btn{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line);background:var(--surface2);color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13.5px;margin-top:10px}
+.theme-btn:hover{border-color:var(--muted2)}
+.theme-btn svg{flex:0 0 auto}
+@media (max-width:1100px){.hoje{grid-template-columns:1fr}}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);z-index:40;gap:2px}
+  .brand,.side-foot{display:none}
+  .nav{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:8px 2px;font-size:11.5px;text-align:center}
+  .nav .badge{font-size:10px;padding:0 6px}
+  .main{padding:20px 16px 120px}
+  .page-head h1{font-size:25px}
+  .ra{grid-template-columns:4px minmax(0,1fr);gap:12px}
+  .ra-act{grid-column:2;justify-content:flex-start}
+  .crow{grid-template-columns:42px minmax(0,1fr) auto}
+  .crow .hide-m{display:none}
+  .grid2{grid-template-columns:1fr}
+  .drawer{padding-left:18px;padding-right:18px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .theme-btn{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;width:auto;margin:0;padding:8px;z-index:41;border-radius:50%}
+  .theme-btn span{display:none}
+  .page-head h1{padding-right:44px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+[hidden]{display:none!important}
+.login{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:20px}
+.login .panel{width:min(400px,100%);padding:30px 28px}
+.login .brand{padding:0 0 22px}
+.login .f{margin-bottom:14px}
+.login .f .input{width:100%}
+.login h2{font-size:22px;margin-bottom:4px}
+.login .sub{margin-bottom:20px}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.danger{color:var(--red);border-color:var(--red-soft);background:var(--surface)}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+.side-foot .btn{margin-top:10px;width:100%}
+.side-foot strong{word-break:break-all}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.js"></script>
+</head>
+<body>
+<div class="login" id="setup" hidden>
+  <div class="panel"><div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="14" cy="17" r="12" fill="none" stroke="var(--plum)" stroke-width="3"/><circle cx="22" cy="19" r="6" fill="var(--rose)"/></svg>
+      <div><b>Ninho</b><small>Salário maternidade</small></div>
+    </div>
+    <h2>Falta configurar a conexão</h2>
+    <p class="sub">Abra este arquivo em um editor de texto e preencha <b>SUPABASE_URL</b> e <b>SUPABASE_KEY</b> no início do script.</p>
+  </div>
+</div>
+<div class="login" id="login" hidden>
+  <div class="panel"><div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="14" cy="17" r="12" fill="none" stroke="var(--plum)" stroke-width="3"/><circle cx="22" cy="19" r="6" fill="var(--rose)"/></svg>
+      <div><b>Ninho</b><small>Salário maternidade</small></div>
+    </div>
+    <h2>Entrar</h2>
+    <p class="sub">Acesse com o e-mail e a senha cadastrados.</p>
+    <div class="f"><label for="lEmail">E-mail</label><input class="input" id="lEmail" type="email" autocomplete="username"></div>
+    <div class="f"><label for="lSenha">Senha</label><input class="input" id="lSenha" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin(document.getElementById('lBtn'))"></div>
+    <p class="err" id="lErr" hidden></p>
+    <button class="btn primary" id="lBtn" style="width:100%;margin-top:8px" onclick="fazerLogin(this)">Entrar</button>
+  </div>
+</div>
+<div class="app" id="app" hidden>
+  <nav class="side" aria-label="Menu principal">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="14" cy="17" r="12" fill="none" stroke="var(--plum)" stroke-width="3"/><circle cx="22" cy="19" r="6" fill="var(--rose)"/></svg>
+      <div><b>Ninho</b><small>Salário maternidade</small></div>
+    </div>
+    <button class="nav" data-v="hoje" onclick="go('hoje')"><span>Hoje</span><span class="badge" id="bdg"></span></button>
+    <button class="nav" data-v="funil" onclick="go('funil')"><span>Funil</span></button>
+    <button class="nav" data-v="clientes" onclick="go('clientes')"><span>Clientes</span></button>
+    <button class="nav" data-v="financeiro" onclick="go('financeiro')"><span>Financeiro</span></button>
+    <button class="nav" data-v="parceiros" onclick="go('parceiros')"><span>Parceiros</span></button>
+    <button class="theme-btn" id="themeBtn" onclick="trocarTema()"></button>
+    <div class="side-foot"><strong id="userEmail"></strong>Conectada<button class="btn sm" onclick="sair()">Sair</button></div>
+  </nav>
+  <main class="main" id="main"></main>
+</div>
+<div class="drawer-wrap" id="drawer" hidden onclick="if(event.target===this)fechar()"></div>
+<div class="modal" id="modal" hidden onclick="if(event.target===this)fecharModal()"></div>
+<div class="toast" id="toast" hidden role="status"></div>
+<script>
+/* =========================================================
+   CONFIGURAÇÃO DO SUPABASE
+   Cole aqui a Project URL e a chave pública (anon / publishable)
+   ========================================================= */
+const SUPABASE_URL='https://hrgpygrsmglktrmztgxy.supabase.co';
+const SUPABASE_KEY='sb_publishable_fEOZSJyuKERv_hANJZ2DgA_AwDKyGSy';
+
+const configurado=!SUPABASE_URL.startsWith('COLE_AQUI')&&!SUPABASE_KEY.startsWith('COLE_AQUI');
+const sb=configurado?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+
+/* ---------- Utilidades de data e formato ---------- */
+const pad=n=>String(n).padStart(2,'0');
+const T=new Date();T.setHours(0,0,0,0);
+const iso=x=>`${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`;
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const today=iso(T);
+const addD=(s,n)=>{const x=parse(s);x.setDate(x.getDate()+n);return iso(x)};
+const addM=(s,n)=>{const x=parse(s);const d=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+n);const last=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();x.setDate(Math.min(d,last));return iso(x)};
+const D=n=>addD(today,n);
+const diff=(a,b)=>Math.round((parse(a)-parse(b))/864e5);
+const br=s=>s?String(s).slice(0,10).split('-').reverse().join('/'):'';
+const brl=v=>(+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const noMes=s=>{if(!s)return false;const x=parse(s);return x.getMonth()===T.getMonth()&&x.getFullYear()===T.getFullYear()};
+const primeiro=n=>{const p=String(n||'').trim().split(' ')[0].toLocaleLowerCase('pt-BR');return p.charAt(0).toLocaleUpperCase('pt-BR')+p.slice(1)};
+const fmtQuando=ts=>{const x=new Date(ts);return `${pad(x.getDate())}/${pad(x.getMonth()+1)}/${x.getFullYear()} às ${pad(x.getHours())}:${pad(x.getMinutes())}`};
+const so=v=>String(v||'').replace(/\D/g,'');
+function aplicaMasc(d,pat){let r='',i=0;for(const ch of pat){if(i>=d.length)break;if(ch==='#'){r+=d[i++]}else r+=ch}return r}
+const mascCPF=v=>aplicaMasc(so(v).slice(0,11),'###.###.###-##');
+const mascNIS=v=>aplicaMasc(so(v).slice(0,11),'###.#####.##-#');
+const mascTel=v=>{const d=so(v).slice(0,11);return aplicaMasc(d,d.length>10?'(##) #####-####':'(##) ####-####')};
+const MASC={cpf:mascCPF,nis:mascNIS,tel:mascTel};
+function masc(el,t){el.value=MASC[t](el.value)}
+function up(el){const s=el.selectionStart,e=el.selectionEnd;el.value=el.value.toLocaleUpperCase('pt-BR');try{el.setSelectionRange(s,e)}catch(_){}}
+const UP=v=>String(v||'').trim().toLocaleUpperCase('pt-BR');
+const wa=(tel,msg)=>`https://wa.me/55${so(tel)}?text=${encodeURIComponent(msg)}`;
+
+/* ---------- Regras fixas ---------- */
+const CFG={diasDAS:5,diasINSS:45};
+const ETAPAS=[
+ {id:'lead',nome:'Triagem',g:'inicio'},
+ {id:'atendimento',nome:'Atendimento',g:'inicio'},
+ {id:'fechamento',nome:'Fechamento',g:'inicio'},
+ {id:'gerardas',nome:'Gerar DAS',g:'das'},
+ {id:'pagamento',nome:'Aguardando pagamento',g:'das'},
+ {id:'parto',nome:'Aguardando parto',g:'gestacao'},
+ {id:'posparto',nome:'Pós-parto',g:'gestacao'},
+ {id:'protocolado',nome:'Protocolado no INSS',g:'inss'},
+ {id:'analise',nome:'Em análise no INSS',g:'inss'},
+ {id:'aprovado',nome:'Aprovado, em cobrança',g:'cobranca'},
+ {id:'finalizado',nome:'Finalizado',g:'fim'}];
+const CHIP={inicio:'',das:'warn',gestacao:'rose',inss:'info',cobranca:'ok',fim:''};
+const COR={inicio:'var(--muted2)',das:'var(--honey)',gestacao:'var(--rose)',inss:'var(--plum)',cobranca:'var(--sage)',fim:'var(--muted)'};
+const etapa=id=>ETAPAS.find(e=>e.id===id)||ETAPAS[0];
+const idxE=id=>ETAPAS.findIndex(e=>e.id===id);
+const DOCS=[['rg','Documento de identificação (RG ou CNH)'],['res','Comprovante de residência'],['das','Guia do DAS'],['pagdas','Comprovante de pagamento do DAS'],['cert','Certidão de nascimento do bebê'],['contrato','Contrato de prestação de serviços']];
+const PAGO={cliente:'A cliente',assessoria:'A assessoria',colab:'O colaborador'};
+
+/* ---------- Dados (carregados do banco) ---------- */
+let clientes=[],colaboradores=[],comissionados=[],usuario='',pronto=false;
+const COLS='id,nome,cpf,nis,tel,endereco,nasc,dpp,parto,tem_senha,colab_id,indic_id,etapa,desde,docs,das_venc,das_valor,das_pago_por,honorario,comissao_paga,criado_em';
+const getC=id=>clientes.find(c=>c.id===id);
+const getColab=id=>colaboradores.find(x=>x.id===id);
+const getInd=id=>comissionados.find(x=>x.id===id);
+function deDB(r,antigo){
+  return{id:r.id,nome:r.nome,cpf:r.cpf,nis:r.nis||'',tel:r.tel||'',end:r.endereco||'',nasc:r.nasc||'',dpp:r.dpp||'',parto:r.parto||'',
+    temSenha:!!r.tem_senha,colab:r.colab_id,indic:r.indic_id,etapa:r.etapa,desde:r.desde,docs:r.docs||{},
+    das:r.das_venc?{venc:r.das_venc,valor:+r.das_valor||0,pagoPor:r.das_pago_por||'cliente'}:null,
+    honorario:+r.honorario||0,comissaoPaga:!!r.comissao_paga,
+    parcelas:antigo?antigo.parcelas:[],log:null};
+}
+const deParc=r=>({id:r.id,n:r.n,data:r.data,limite:r.limite,valor:+r.valor,recebido:r.recebido,recebidoEm:r.recebido_em});
+const ordenar=()=>clientes.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+
+async function q(p){
+  const{data,error}=await p;
+  if(error){
+    console.error(error);
+    toast(error.code==='23505'?'Já existe uma cliente cadastrada com este CPF.':`Não foi possível concluir: ${error.message}`);
+    throw error;
+  }
+  return data;
+}
+async function carregar(){
+  const[cs,ps,cols,inds,cfg]=await Promise.all([
+    q(sb.from('clientes').select(COLS)),
+    q(sb.from('parcelas').select('*').order('n')),
+    q(sb.from('colaboradores').select('*').order('nome')),
+    q(sb.from('comissionados').select('*').order('nome')),
+    q(sb.from('config').select('*').eq('id',1).maybeSingle())]);
+  colaboradores=cols.map(x=>({id:x.id,nome:x.nome,divisao:+x.divisao}));
+  comissionados=inds.map(x=>({id:x.id,nome:x.nome,obs:x.obs||'',tipo:x.tipo,valor:+x.valor}));
+  clientes=cs.map(r=>deDB(r));ordenar();
+  for(const p of ps){const c=getC(p.cliente_id);if(c)c.parcelas.push(deParc(p))}
+  if(cfg){CFG.diasDAS=cfg.dias_das;CFG.diasINSS=cfg.dias_inss}
+  pronto=true;
+}
+async function upd(c,campos){await q(sb.from('clientes').update(campos).eq('id',c.id))}
+async function registrar(c,acao){
+  const r=await q(sb.from('historico').insert({cliente_id:c.id,acao}).select().single());
+  if(c.log)c.log.unshift(r);
+}
+
+/* ---------- Regras de negócio ---------- */
+function stP(p){return p.recebido?'recebido':(diff(today,p.limite)>0?'atrasado':'areceber')}
+const ST_P={recebido:['Recebido','ok'],atrasado:['Atrasado','bad'],areceber:['A receber','info']};
+function comissaoTotal(c){const ind=getInd(c.indic);if(!ind)return 0;return ind.tipo==='pct'?c.honorario*ind.valor/100:ind.valor}
+function rateio(c,p){
+  /* A comissão de quem indicou sai primeiro dos valores recebidos (a partir da 1ª parcela).
+     Se a parcela não cobrir a comissão inteira, o restante sai da parcela seguinte.
+     O que sobra é dividido entre colaborador e assessoria. */
+  const col=getColab(c.colab);
+  let resta=comissaoTotal(c),comissao=0;
+  for(const x of [...c.parcelas].sort((a,b)=>a.n-b.n)){const d=Math.min(resta,x.valor);if(x===p){comissao=d;break}resta-=d}
+  const base=p.valor-comissao;
+  const colab=col?base*col.divisao/100:0;
+  return{comissao,colab,assessoria:base-colab};
+}
+function ajusteDAS(c){
+  const col=getColab(c.colab);if(!col||!c.das)return 0;
+  const parte=c.das.valor*col.divisao/100;
+  if(c.das.pagoPor==='colab')return c.das.valor-parte;
+  if(c.das.pagoPor==='assessoria')return -parte;
+  return 0;
+}
+function alertas(){
+  const a=[];
+  for(const c of clientes){
+    const n=primeiro(c.nome);
+    if(c.etapa==='pagamento'&&c.das&&!c.docs.pagdas){
+      const d=diff(c.das.venc,today);
+      if(d<=CFG.diasDAS)a.push({key:'das'+c.id,tipo:'das',ord:d<0?1:3,c,rot:'DAS',cls:'warn',
+        txt:d<0?`Guia DAS venceu há ${-d} dia(s) e o comprovante não foi recebido.`:d===0?'Guia DAS vence hoje e o comprovante não foi recebido.':`Guia DAS vence em ${d} dia(s), em ${br(c.das.venc)}, e o comprovante não foi recebido.`,
+        msg:`Olá, ${n}! A guia do DAS vence em ${br(c.das.venc)}. Assim que pagar, me envie o comprovante, por favor.`});
+    }
+    if(c.dpp&&!c.parto&&diff(today,c.dpp)>=0&&idxE(c.etapa)<=idxE('parto'))
+      a.push({key:'parto'+c.id,tipo:'parto',ord:4,c,rot:'Parto',cls:'rose',
+        txt:`A data prevista do parto (${br(c.dpp)}) chegou. Confirme o nascimento e registre a data real.`,
+        msg:`Olá, ${n}! Como você e o bebê estão? Quando puder, me envie uma foto da certidão de nascimento para darmos entrada no benefício.`});
+    if(c.etapa==='analise'&&diff(today,c.desde)>CFG.diasINSS)
+      a.push({key:'inss'+c.id,tipo:'inss',ord:5,c,rot:'INSS',cls:'info',
+        txt:`Em análise há ${diff(today,c.desde)} dias. Vale consultar o andamento no Meu INSS.`,
+        msg:`Olá, ${n}! Seu pedido segue em análise no INSS. Estou acompanhando e aviso assim que houver resposta.`});
+    for(const p of c.parcelas){
+      if(!p.recebido&&p.data===today)
+        a.push({key:'cob'+c.id+p.n,tipo:'cobranca',ord:2,c,p,rot:'Cobrança',cls:'ok',
+          txt:`Hoje ${n} recebe a ${p.n}ª parcela do INSS. Inicie o contato para garantir o repasse de ${brl(p.valor)} até ${br(p.limite)}.`,
+          msg:`Olá, ${n}! Tudo bem? Hoje cai a ${p.n}ª parcela do seu salário-maternidade. Assim que receber, pode fazer o Pix dos honorários (${brl(p.valor)}) até ${br(p.limite)}. Obrigada!`});
+      if(stP(p)==='atrasado')
+        a.push({key:'atr'+c.id+p.n,tipo:'atrasado',ord:0,c,p,rot:'Repasse atrasado',cls:'bad',
+          txt:`O repasse da ${p.n}ª parcela (${brl(p.valor)}) venceu em ${br(p.limite)}, há ${diff(today,p.limite)} dia(s).`,
+          msg:`Olá, ${n}! Passando para lembrar do repasse da ${p.n}ª parcela (${brl(p.valor)}), que venceu em ${br(p.limite)}. Consegue enviar hoje?`});
+    }
+  }
+  return a.sort((x,y)=>x.ord-y.ord);
+}
+
+/* ---------- Estado da tela ---------- */
+const state={view:'hoje',feitos:new Set(),busca:'',filtro:'',finAba:'parcelas',aberta:null,aba:'resumo',senhaTexto:null};
+try{const f=JSON.parse(localStorage.getItem('ninho-feitos')||'{}');if(f.dia===today)state.feitos=new Set(f.k)}catch(e){}
+function go(v){state.view=v;render();window.scrollTo(0,0)}
+function render(){
+  if(!pronto)return;
+  document.getElementById('main').innerHTML=VIEWS[state.view]();
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.v===state.view));
+  const n=alertas().filter(a=>!state.feitos.has(a.key)).length;
+  const b=document.getElementById('bdg');b.textContent=n||'';b.hidden=!n;
+  if(state.aberta)renderDrawer();
+}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,4200)}
+async function ocupado(btn,fn){
+  if(btn){if(btn.disabled)return;btn.disabled=true}
+  try{await fn()}catch(e){}finally{if(btn&&btn.isConnected)btn.disabled=false}
+}
+
+/* ---------- Anel de gestação ---------- */
+function ring(c,lg){
+  const cls='ring'+(lg?' lg':'');
+  if(c.parto){const d=Math.max(0,diff(today,c.parto));return `<div class="${cls}" style="--p:100;--c:var(--sage)" title="Bebê com ${d} dias"><span>${d}d</span></div>`}
+  if(!c.dpp)return `<div class="${cls}" title="Sem data prevista do parto"><span>?</span></div>`;
+  const d=diff(c.dpp,today);
+  if(d<0)return `<div class="${cls}" style="--p:100;--c:var(--red)" title="Data prevista passou há ${-d} dias"><span>+${-d}d</span></div>`;
+  const s=Math.min(40,Math.max(0,40-Math.ceil(d/7)));
+  return `<div class="${cls}" style="--p:${s/40*100}" title="${s} semanas, parto previsto em ${br(c.dpp)}"><span>${s}s</span></div>`;
+}
+
+/* ---------- Tela: Hoje ---------- */
+function renderHoje(){
+  const al=alertas().filter(a=>!state.feitos.has(a.key));
+  const h=new Date().getHours();const saud=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  const dl=T.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  const mes=MESES[T.getMonth()];
+  const ps=clientes.flatMap(c=>c.parcelas.map(p=>({c,p})));
+  const doMes=ps.filter(x=>noMes(x.p.data));
+  const prev=sum(doMes.map(x=>x.p.valor)),rec=sum(doMes.filter(x=>x.p.recebido).map(x=>x.p.valor));
+  const atr=sum(ps.filter(x=>stP(x.p)==='atrasado').map(x=>x.p.valor));
+  const ag=clientes.filter(c=>!c.parto&&noMes(c.dpp)).sort((a,b)=>a.dpp.localeCompare(b.dpp));
+  const wk=[0,0,0,0,0];ag.forEach(c=>wk[Math.min(4,Math.floor((parse(c.dpp).getDate()-1)/7))]++);
+  const wmax=Math.max(1,...wk);const wl=['1 a 7','8 a 14','15 a 21','22 a 28','29 em diante'];
+  const cont=ETAPAS.map(e=>clientes.filter(c=>c.etapa===e.id).length);const cmax=Math.max(1,...cont);
+
+  const rows=!clientes.length?`<div class="empty"><strong>Nenhuma cliente cadastrada ainda</strong>Comece cadastrando a primeira cliente. Os prazos e cobranças aparecem aqui automaticamente.<div style="margin-top:14px"><button class="btn primary" onclick="novaCliente()">Cadastrar primeira cliente</button></div></div>`
+    :al.length?al.map(a=>`
+    <div class="ra t-${a.tipo}"><span class="mark"></span>
+      <div><div class="ra-top"><span class="chip ${a.cls}">${a.rot}</span><button class="link" onclick="abrir('${a.c.id}')">${esc(a.c.nome)}</button></div><p>${a.txt}</p></div>
+      <div class="ra-act">
+        <a class="btn sm wa" href="${wa(a.c.tel,a.msg)}" target="_blank" rel="noopener">WhatsApp</a>
+        ${a.p?`<button class="btn sm" onclick="receber('${a.c.id}',${a.p.n})">Marcar recebido</button>`:''}
+        <button class="btn sm ghost" onclick="feito('${a.key}')">Dispensar</button>
+      </div></div>`).join('')
+    :`<div class="empty"><strong>Tudo em dia</strong>Nenhum prazo ou cobrança pede atenção hoje.</div>`;
+
+  return `
+  <div class="page-head"><div><h1>${saud}. Hoje é ${dl}.</h1>
+    <p class="sub">${al.length?`${al.length} ${al.length===1?'item pede':'itens pedem'} sua atenção, começando pelos mais urgentes.`:'Sem pendências urgentes por agora.'}</p></div>
+    <button class="btn primary" onclick="novaCliente()">Nova cliente</button></div>
+  <div class="hoje">
+    <section><h2 class="sec">Para resolver hoje</h2><div class="panel">${rows}</div></section>
+    <aside class="stack">
+      <div class="panel pad"><h2 class="sec">Recebimentos de ${mes}</h2>
+        <div class="big">${brl(prev)}</div><p class="muted" style="font-size:13px">previstos em honorários neste mês</p>
+        <div class="prog"><i style="width:${prev?rec/prev*100:0}%"></i></div>
+        <div class="kv"><span>Já recebido</span><b>${brl(rec)}</b></div>
+        <div class="kv"><span>Falta receber</span><b>${brl(prev-rec)}</b></div>
+        <div class="kv"><span>Em atraso (todos os meses)</span><b style="color:var(--red)">${brl(atr)}</b></div>
+      </div>
+      <div class="panel pad"><h2 class="sec">Partos previstos em ${mes}</h2>
+        <div class="weeks">${wk.map((n,i)=>`<div class="wk"><b>${n}</b><i style="height:${n?Math.max(10,n/wmax*70):3}px"></i><small>dias ${wl[i]}</small></div>`).join('')}</div>
+        <p class="names">${ag.length?ag.map(c=>`<span>${esc(primeiro(c.nome))}</span> ${br(c.dpp).slice(0,5)}`).join(', '):'Nenhum parto previsto para este mês.'}</p>
+      </div>
+      <div class="panel pad"><h2 class="sec">Clientes por etapa</h2>
+        ${ETAPAS.map((e,i)=>`<button class="sbar" onclick="go('funil')"><span>${e.nome}</span><span class="track"><i style="width:${cont[i]/cmax*100}%;background:${COR[e.g]}"></i></span><b>${cont[i]}</b></button>`).join('')}
+      </div>
+    </aside>
+  </div>`;
+}
+function feito(k){
+  state.feitos.add(k);
+  try{localStorage.setItem('ninho-feitos',JSON.stringify({dia:today,k:[...state.feitos]}))}catch(e){}
+  render();toast('Item dispensado até amanhã.');
+}
+
+/* ---------- Tela: Funil ---------- */
+function infoCard(c){
+  if(c.etapa==='pagamento'&&c.das){const d=diff(c.das.venc,today);return c.docs.pagdas?'Comprovante recebido':`<span class="${d<=CFG.diasDAS?'flag':''}">DAS vence ${br(c.das.venc).slice(0,5)}</span>`}
+  if(c.etapa==='analise'){const d=diff(today,c.desde);return `<span class="${d>CFG.diasINSS?'flag':''}">Em análise há ${d} dias</span>`}
+  if(c.etapa==='aprovado'){const r=c.parcelas.filter(p=>p.recebido).length,at=c.parcelas.some(p=>stP(p)==='atrasado');return `${r} de ${c.parcelas.length} parcelas recebidas${at?' <span class="flag">, com atraso</span>':''}`}
+  if(c.etapa==='parto')return c.dpp?`Parto previsto ${br(c.dpp).slice(0,5)}`:'';
+  if(c.etapa==='posparto')return c.docs.cert?'Certidão recebida':'Aguardando certidão';
+  const d=diff(today,c.desde);return d?`Na etapa há ${d} dia(s)`:'Entrou hoje';
+}
+function renderFunil(){
+  return `
+  <div class="page-head"><div><h1>Funil</h1><p class="sub">Arraste as clientes entre as etapas. No celular, toque na cliente e troque a etapa pela ficha.</p></div>
+    <button class="btn primary" onclick="novaCliente()">Nova cliente</button></div>
+  <div class="board">${ETAPAS.map(e=>{const cs=clientes.filter(c=>c.etapa===e.id);
+    return `<div class="col" style="--g:${COR[e.g]}" data-etapa="${e.id}" ondragover="dOver(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)">
+      <h3>${e.nome}<span>${cs.length}</span></h3>
+      ${cs.length?cs.map(c=>`<div class="kcard" role="button" tabindex="0" onkeydown="if(event.key==='Enter')abrir('${c.id}')" draggable="true" ondragstart="dStart(event,'${c.id}')" ondragend="this.classList.remove('dragging')" onclick="abrir('${c.id}')">
+        <div><strong>${esc(c.nome)}</strong><small>${infoCard(c)}</small>${c.colab&&getColab(c.colab)?`<small>Com ${esc(primeiro(getColab(c.colab).nome))}</small>`:''}</div>${ring(c)}</div>`).join(''):'<p class="empty-col">Nenhuma cliente nesta etapa.</p>'}
+    </div>`}).join('')}</div>`;
+}
+function dStart(e,id){e.dataTransfer.setData('text/plain',id);e.dataTransfer.effectAllowed='move';e.target.classList.add('dragging')}
+function dOver(e){e.preventDefault();e.currentTarget.classList.add('over')}
+function dLeave(e){e.currentTarget.classList.remove('over')}
+function dDrop(e){e.preventDefault();e.currentTarget.classList.remove('over');const id=e.dataTransfer.getData('text/plain');if(id)mover(id,e.currentTarget.dataset.etapa)}
+async function mover(id,nova){
+  const c=getC(id);if(!c||c.etapa===nova)return;
+  if(nova==='aprovado'&&!c.parcelas.length){modalAprovar(id);return}
+  const de=etapa(c.etapa).nome;
+  try{
+    await upd(c,{etapa:nova,desde:today});
+    c.etapa=nova;c.desde=today;
+    await registrar(c,`Etapa alterada de "${de}" para "${etapa(nova).nome}"`);
+    toast(`${primeiro(c.nome)} agora está em ${etapa(nova).nome}.`);
+  }catch(e){}
+  render();
+}
+
+/* ---------- Tela: Clientes ---------- */
+function renderClientes(){
+  return `
+  <div class="page-head"><div><h1>Clientes</h1><p class="sub">${clientes.length} cliente(s) cadastrada(s). Toque em uma para abrir a ficha completa.</p></div>
+    <button class="btn primary" onclick="novaCliente()">Nova cliente</button></div>
+  <div class="tools">
+    <input class="input" type="search" placeholder="Buscar por nome, CPF ou telefone" value="${esc(state.busca)}" oninput="state.busca=this.value;renderLista()" aria-label="Buscar clientes">
+    <select class="select" onchange="state.filtro=this.value;renderLista()" aria-label="Filtrar por etapa"><option value="">Todas as etapas</option>${ETAPAS.map(e=>`<option value="${e.id}" ${state.filtro===e.id?'selected':''}>${e.nome}</option>`).join('')}</select>
+  </div>
+  <div class="panel" id="lista">${lista()}</div>`;
+}
+function lista(){
+  if(!clientes.length)return `<div class="empty"><strong>Nenhuma cliente cadastrada ainda</strong><div style="margin-top:12px"><button class="btn primary" onclick="novaCliente()">Cadastrar primeira cliente</button></div></div>`;
+  const q=state.busca.toLowerCase().trim(),qd=so(q);
+  const cs=clientes.filter(c=>(!state.filtro||c.etapa===state.filtro)&&(!q||c.nome.toLowerCase().includes(q)||(qd&&(so(c.cpf).includes(qd)||so(c.tel).includes(qd)))));
+  if(!cs.length)return `<div class="empty"><strong>Nenhuma cliente encontrada</strong>Ajuste a busca ou o filtro de etapa.</div>`;
+  return cs.map(c=>{const e=etapa(c.etapa);return `<div class="crow" onclick="abrir('${c.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')abrir('${c.id}')">
+    ${ring(c)}<div><strong>${esc(c.nome)}</strong><small>CPF ${esc(c.cpf)}</small></div>
+    <div class="hide-m"><span class="chip ${CHIP[e.g]}">${e.nome}</span></div>
+    <div class="hide-m"><small>Parto previsto</small>${br(c.dpp)||'Não informado'}</div>
+    <div class="hide-m"><small>Colaborador</small>${c.colab&&getColab(c.colab)?esc(getColab(c.colab).nome):'Nenhum'}</div>
+    <a class="btn sm wa" href="${wa(c.tel,`Olá, ${primeiro(c.nome)}!`)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">WhatsApp</a></div>`}).join('');
+}
+function renderLista(){document.getElementById('lista').innerHTML=lista()}
+
+/* ---------- Tela: Financeiro ---------- */
+function renderFin(){
+  const abas=[['parcelas','Parcelas'],['comissoes','Comissões'],['colabs','Acerto com colaboradores']];
+  let corpo='';
+  if(state.finAba==='parcelas'){
+    const ps=clientes.flatMap(c=>c.parcelas.map(p=>({c,p}))).filter(x=>noMes(x.p.data)||stP(x.p)==='atrasado').sort((a,b)=>a.p.data.localeCompare(b.p.data));
+    const prev=sum(ps.filter(x=>noMes(x.p.data)).map(x=>x.p.valor)),rec=sum(ps.filter(x=>x.p.recebido&&noMes(x.p.data)).map(x=>x.p.valor)),atr=sum(ps.filter(x=>stP(x.p)==='atrasado').map(x=>x.p.valor));
+    corpo=`<div class="totals"><div class="panel tot"><span>Previsto em ${MESES[T.getMonth()]}</span><b>${brl(prev)}</b></div><div class="panel tot"><span>Recebido</span><b style="color:var(--sage)">${brl(rec)}</b></div><div class="panel tot"><span>Em atraso</span><b style="color:var(--red)">${brl(atr)}</b></div></div>
+    <div class="panel twrap"><table><thead><tr><th>Cliente</th><th>Parcela</th><th>Recebe do INSS</th><th>Limite do repasse</th><th class="num">Valor</th><th>Situação</th><th></th></tr></thead><tbody>
+    ${ps.length?ps.map(({c,p})=>{const s=ST_P[stP(p)];return `<tr><td><button class="link" onclick="abrir('${c.id}','financeiro')">${esc(c.nome)}</button></td><td>${p.n}ª de ${c.parcelas.length}</td><td>${br(p.data)}</td><td>${br(p.limite)}</td><td class="num">${brl(p.valor)}</td><td><span class="chip ${s[1]}">${s[0]}</span></td><td>${p.recebido?'':`<button class="btn sm" onclick="receber('${c.id}',${p.n})">Marcar recebido</button>`}</td></tr>`}).join(''):'<tr><td colspan="7" class="muted">Nenhuma parcela prevista para este mês.</td></tr>'}
+    </tbody></table></div>`;
+  }
+  if(state.finAba==='comissoes'){
+    const cs=clientes.filter(c=>c.indic&&getInd(c.indic));
+    const sit=c=>{if(c.comissaoPaga)return['Paga','ok'];const desc=sum(c.parcelas.filter(p=>p.recebido).map(p=>rateio(c,p).comissao));return desc>0&&desc>=comissaoTotal(c)-0.005?['Liberada para pagar','warn']:desc>0?['Parcialmente descontada','info']:['Aguardando recebimento','info']};
+    const lib=sum(cs.filter(c=>sit(c)[1]==='warn').map(comissaoTotal));
+    corpo=`<div class="totals"><div class="panel tot"><span>Liberadas, a pagar agora</span><b style="color:var(--honey)">${brl(lib)}</b></div><div class="panel tot"><span>Aguardando a cliente pagar</span><b>${brl(sum(cs.filter(c=>sit(c)[1]==='info').map(comissaoTotal)))}</b></div></div>
+    <div class="panel twrap"><table><thead><tr><th>Indicado por</th><th>Cliente</th><th>Regra</th><th class="num">Comissão</th><th>Situação</th><th></th></tr></thead><tbody>
+    ${cs.length?cs.map(c=>{const i=getInd(c.indic),s=sit(c);return `<tr><td>${esc(i.nome)}</td><td><button class="link" onclick="abrir('${c.id}')">${esc(c.nome)}</button></td><td>${i.tipo==='pct'?i.valor+'% dos honorários':brl(i.valor)+' fixo'}</td><td class="num">${brl(comissaoTotal(c))}</td><td><span class="chip ${s[1]}">${s[0]}</span></td><td>${s[1]==='warn'?`<button class="btn sm" onclick="pagarComissao(this,'${c.id}')">Registrar pagamento</button>`:''}</td></tr>`}).join(''):'<tr><td colspan="6" class="muted">Nenhuma cliente com indicação.</td></tr>'}
+    </tbody></table></div>`;
+  }
+  if(state.finAba==='colabs'){
+    corpo=(colaboradores.length?colaboradores.map(col=>{
+      const cs=clientes.filter(c=>c.colab===col.id);
+      const linhas=cs.map(c=>{const hon=sum(c.parcelas.filter(p=>p.recebido).map(p=>rateio(c,p).colab));const das=ajusteDAS(c);return{c,hon,das,tot:hon+das}});
+      const saldo=sum(linhas.map(l=>l.tot));
+      return `<div class="panel pad" style="margin-bottom:18px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+        <div><h2 class="sec" style="margin:0">${esc(col.nome)}</h2><p class="muted" style="font-size:13px">Fica com ${col.divisao}% dos honorários e divide o DAS na mesma proporção.</p></div>
+        <div style="text-align:right"><span class="muted" style="font-size:13px">${saldo>=0?'Saldo a repassar para ele(a)':'Saldo a receber dele(a)'}</span><div class="big" style="font-size:26px;color:${saldo>=0?'var(--plum)':'var(--red)'}">${brl(Math.abs(saldo))}</div></div></div>
+        <div class="twrap"><table><thead><tr><th>Cliente</th><th>Etapa</th><th class="num">Parte nos honorários recebidos</th><th class="num">Ajuste do DAS</th><th class="num">Total</th></tr></thead><tbody>
+        ${linhas.length?linhas.map(l=>`<tr><td><button class="link" onclick="abrir('${l.c.id}','financeiro')">${esc(l.c.nome)}</button></td><td>${etapa(l.c.etapa).nome}</td><td class="num">${brl(l.hon)}</td><td class="num">${l.das>0?'+':''}${brl(l.das)}</td><td class="num"><b>${brl(l.tot)}</b></td></tr>`).join(''):'<tr><td colspan="5" class="muted">Nenhum processo em parceria.</td></tr>'}
+        </tbody></table></div></div>`}).join(''):'<div class="panel"><div class="empty"><strong>Nenhum colaborador cadastrado</strong>Cadastre na tela Parceiros.</div></div>')
+      +`<p class="note">Em cada recebimento, a comissão de quem indicou sai primeiro e o restante é dividido entre o colaborador e a assessoria. Ajuste do DAS positivo: o colaborador pagou a guia e a assessoria devolve a parte dela. Negativo: a assessoria pagou e o colaborador devolve a parte dele.</p>`;
+  }
+  return `<div class="page-head"><div><h1>Financeiro</h1><p class="sub">Parcelas, comissões de quem indicou e o acerto com os colaboradores parceiros.</p></div></div>
+  <div class="tabs" role="tablist">${abas.map(([k,n])=>`<button class="tab ${state.finAba===k?'on':''}" role="tab" onclick="state.finAba='${k}';render()">${n}</button>`).join('')}</div>${corpo}`;
+}
+function receber(cid,n){
+  const c=getC(cid),p=c.parcelas.find(x=>x.n===n);if(!p||p.recebido)return;
+  const r=rateio(c,p),ind=getInd(c.indic),col=getColab(c.colab),base=p.valor-r.comissao;
+  modal(`<h2>Confirmar recebimento</h2><p class="sub">${esc(c.nome)}, ${p.n}ª parcela. Veja como o valor será dividido.</p>
+    <div class="kv"><span>Valor recebido da cliente</span><b>${brl(p.valor)}</b></div>
+    ${ind?`<div class="kv"><span>1º Comissão de ${esc(ind.nome)}</span><b style="color:var(--honey)">${r.comissao?'- '+brl(r.comissao):'Já descontada antes'}</b></div>`:''}
+    <div class="kv"><span>${ind?'2º Sobra para dividir':'Valor a dividir'}</span><b>${brl(base)}</b></div>
+    ${col?`<div class="kv"><span>Parte de ${esc(col.nome)} (${col.divisao}%)</span><b style="color:var(--plum)">${brl(r.colab)}</b></div>
+    <div class="kv"><span>Parte da assessoria (${100-col.divisao}%)</span><b style="color:var(--sage)">${brl(r.assessoria)}</b></div>`
+    :`<div class="kv"><span>Fica com a assessoria (sem colaborador)</span><b style="color:var(--sage)">${brl(r.assessoria)}</b></div>`}
+    <div class="mact"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="confirmarReceb(this,'${cid}',${n})">Confirmar recebimento</button></div>`);
+}
+function confirmarReceb(btn,cid,n){ocupado(btn,async()=>{
+  const c=getC(cid),p=c.parcelas.find(x=>x.n===n);if(!p||p.recebido)return;
+  await q(sb.from('parcelas').update({recebido:true,recebido_em:today}).eq('id',p.id));
+  p.recebido=true;p.recebidoEm=today;const r=rateio(c,p);
+  fecharModal();
+  await registrar(c,`Parcela ${n} recebida (${brl(p.valor)}). Comissão: ${brl(r.comissao)}. Colaborador: ${brl(r.colab)}. Assessoria: ${brl(r.assessoria)}.`);
+  render();
+  toast(c.parcelas.every(x=>x.recebido)?`Todas as parcelas de ${primeiro(c.nome)} foram recebidas. Após os acertos, mova para Finalizado.`:`Parcela ${n} de ${primeiro(c.nome)} marcada como recebida.`);
+})}
+function receberTudo(cid){
+  const c=getC(cid),pend=c.parcelas.filter(p=>!p.recebido);if(!pend.length)return;
+  const ind=getInd(c.indic),col=getColab(c.colab);
+  const rs=pend.map(p=>rateio(c,p));
+  const total=sum(pend.map(p=>p.valor)),com=sum(rs.map(r=>r.comissao)),pc=sum(rs.map(r=>r.colab)),pa=sum(rs.map(r=>r.assessoria));
+  modal(`<h2>Receber tudo de uma vez</h2><p class="sub">${esc(c.nome)} vai quitar ${pend.length} parcela(s) pendente(s): ${pend.map(p=>p.n+'ª').join(', ')}.</p>
+    <div class="kv"><span>Valor total recebido</span><b>${brl(total)}</b></div>
+    ${ind?`<div class="kv"><span>1º Comissão de ${esc(ind.nome)}</span><b style="color:var(--honey)">${com?'- '+brl(com):'Já descontada antes'}</b></div>`:''}
+    <div class="kv"><span>${ind?'2º Sobra para dividir':'Valor a dividir'}</span><b>${brl(total-com)}</b></div>
+    ${col?`<div class="kv"><span>Parte de ${esc(col.nome)} (${col.divisao}%)</span><b style="color:var(--plum)">${brl(pc)}</b></div>
+    <div class="kv"><span>Parte da assessoria (${100-col.divisao}%)</span><b style="color:var(--sage)">${brl(pa)}</b></div>`
+    :`<div class="kv"><span>Fica com a assessoria (sem colaborador)</span><b style="color:var(--sage)">${brl(pa)}</b></div>`}
+    <div class="mact"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="confirmarTudo(this,'${cid}')">Confirmar recebimento</button></div>`);
+}
+function confirmarTudo(btn,cid){ocupado(btn,async()=>{
+  const c=getC(cid),pend=c.parcelas.filter(p=>!p.recebido);if(!pend.length)return;
+  const rs=pend.map(p=>rateio(c,p));
+  const total=sum(pend.map(p=>p.valor)),com=sum(rs.map(r=>r.comissao)),pc=sum(rs.map(r=>r.colab)),pa=sum(rs.map(r=>r.assessoria));
+  await q(sb.from('parcelas').update({recebido:true,recebido_em:today}).in('id',pend.map(p=>p.id)));
+  pend.forEach(p=>{p.recebido=true;p.recebidoEm=today});
+  fecharModal();
+  await registrar(c,`Pagamento único de ${brl(total)} quitando as parcelas ${pend.map(p=>p.n).join(', ')}. Comissão: ${brl(com)}. Colaborador: ${brl(pc)}. Assessoria: ${brl(pa)}.`);
+  render();
+  toast(`Todas as parcelas de ${primeiro(c.nome)} foram recebidas. Após os acertos, mova para Finalizado.`);
+})}
+function pagarComissao(btn,cid){ocupado(btn,async()=>{
+  const c=getC(cid);await upd(c,{comissao_paga:true});c.comissaoPaga=true;
+  await registrar(c,`Comissão de ${brl(comissaoTotal(c))} paga a ${getInd(c.indic).nome}`);
+  render();toast('Pagamento da comissão registrado.');
+})}
+
+/* ---------- Tela: Parceiros e ajustes ---------- */
+function renderParceiros(){
+  return `<div class="page-head"><div><h1>Parceiros</h1><p class="sub">Colaboradores que dividem processos, pessoas que indicam clientes e ajustes do sistema.</p></div></div>
+  <div class="two">
+    <div class="panel pad"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h2 class="sec" style="margin:0">Colaboradores</h2><button class="btn sm primary" onclick="modalColab()">Adicionar</button></div>
+      ${colaboradores.length?colaboradores.map(c=>`<div class="prow"><div><strong>${esc(c.nome)}</strong><small>${clientes.filter(x=>x.colab===c.id).length} processo(s) em parceria</small></div><div style="display:flex;gap:6px;align-items:center"><span class="chip info">${c.divisao}% / ${100-c.divisao}%</span><button class="btn sm ghost" onclick="modalColab('${c.id}')">Editar</button></div></div>`).join(''):'<p class="muted" style="padding:10px 0">Nenhum colaborador cadastrado.</p>'}
+      <p class="note">O percentual é a parte do colaborador nos honorários, depois de descontada a comissão.</p>
+    </div>
+    <div class="panel pad"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><h2 class="sec" style="margin:0">Quem indica clientes</h2><button class="btn sm primary" onclick="modalInd()">Adicionar</button></div>
+      ${comissionados.length?comissionados.map(c=>`<div class="prow"><div><strong>${esc(c.nome)}</strong><small>${esc(c.obs||'')}${c.obs?', ':''}${clientes.filter(x=>x.indic===c.id).length} indicação(ões)</small></div><div style="display:flex;gap:6px;align-items:center"><span class="chip warn">${c.tipo==='pct'?c.valor+'%':brl(c.valor)}</span><button class="btn sm ghost" onclick="modalInd('${c.id}')">Editar</button></div></div>`).join(''):'<p class="muted" style="padding:10px 0">Ninguém cadastrado ainda.</p>'}
+    </div>
+    <div class="panel pad"><h2 class="sec">Prazos dos alertas</h2>
+      <div class="grid2"><div class="f"><label for="cfgDas">Avisar sobre o DAS com quantos dias de antecedência</label><input class="input" id="cfgDas" type="number" min="0" value="${CFG.diasDAS}" onchange="salvarCfg('dias_das',this.value)"></div>
+      <div class="f"><label for="cfgInss">Avisar quando estiver em análise no INSS há mais de (dias)</label><input class="input" id="cfgInss" type="number" min="0" value="${CFG.diasINSS}" onchange="salvarCfg('dias_inss',this.value)"></div></div>
+    </div>
+    <div class="panel pad"><h2 class="sec">Sua conta</h2>
+      <div class="prow"><div><strong>${esc(usuario)}</strong><small>Conectada ao sistema</small></div><button class="btn sm" onclick="sair()">Sair</button></div>
+    </div>
+  </div>`;
+}
+async function salvarCfg(campo,v){
+  const n=Math.max(0,parseInt(v)||0);
+  try{await q(sb.from('config').upsert({id:1,[campo]:n}));if(campo==='dias_das')CFG.diasDAS=n;else CFG.diasINSS=n;render();toast('Prazo do alerta atualizado.')}catch(e){}
+}
+function modalColab(id){
+  const c=id?getColab(id):{nome:'',divisao:50};
+  modal(`<h2>${id?'Editar':'Novo'} colaborador</h2><p class="sub">Quem divide processos com a assessoria.</p>
+  <div class="grid2"><div class="f full"><label for="mcNome">Nome *</label><input class="input" id="mcNome" value="${esc(c.nome)}" oninput="up(this)"></div>
+  <div class="f"><label for="mcDiv">Parte do colaborador nos honorários (%)</label><input class="input" id="mcDiv" type="number" min="0" max="100" value="${c.divisao}"></div></div>
+  <p class="err" id="mErr" hidden></p>
+  <div class="mact"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="salvarColab(this,'${id||''}')">Salvar</button></div>`);
+}
+function salvarColab(btn,id){ocupado(btn,async()=>{
+  const nome=UP(document.getElementById('mcNome').value),div=Math.min(100,Math.max(0,+document.getElementById('mcDiv').value||0));
+  if(!nome){const e=document.getElementById('mErr');e.textContent='Informe o nome.';e.hidden=false;return}
+  if(id){await q(sb.from('colaboradores').update({nome,divisao:div}).eq('id',id));Object.assign(getColab(id),{nome,divisao:div})}
+  else{const r=await q(sb.from('colaboradores').insert({nome,divisao:div}).select().single());colaboradores.push({id:r.id,nome,divisao:div})}
+  colaboradores.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));fecharModal();render();toast('Colaborador salvo.');
+})}
+function modalInd(id){
+  const c=id?getInd(id):{nome:'',obs:'',tipo:'fixo',valor:100};
+  modal(`<h2>${id?'Editar':'Nova'} indicação</h2><p class="sub">Pessoa que indica clientes e recebe comissão.</p>
+  <div class="grid2"><div class="f full"><label for="miNome">Nome *</label><input class="input" id="miNome" value="${esc(c.nome)}" oninput="up(this)"></div>
+  <div class="f full"><label for="miObs">Observação (opcional)</label><input class="input" id="miObs" value="${esc(c.obs)}" placeholder="Ex.: agente de saúde do bairro"></div>
+  <div class="f"><label for="miTipo">Tipo de comissão</label><select class="select" id="miTipo"><option value="fixo" ${c.tipo==='fixo'?'selected':''}>Valor fixo (R$)</option><option value="pct" ${c.tipo==='pct'?'selected':''}>Percentual dos honorários (%)</option></select></div>
+  <div class="f"><label for="miVal">Valor</label><input class="input" id="miVal" type="number" min="0" step="0.01" value="${c.valor}"></div></div>
+  <p class="err" id="mErr" hidden></p>
+  <div class="mact"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="salvarInd(this,'${id||''}')">Salvar</button></div>`);
+}
+function salvarInd(btn,id){ocupado(btn,async()=>{
+  const nome=UP(document.getElementById('miNome').value),obs=document.getElementById('miObs').value.trim(),tipo=document.getElementById('miTipo').value,valor=Math.max(0,+document.getElementById('miVal').value||0);
+  if(!nome){const e=document.getElementById('mErr');e.textContent='Informe o nome.';e.hidden=false;return}
+  const obj={nome,obs:obs||null,tipo,valor};
+  if(id){await q(sb.from('comissionados').update(obj).eq('id',id));Object.assign(getInd(id),{nome,obs,tipo,valor})}
+  else{const r=await q(sb.from('comissionados').insert(obj).select().single());comissionados.push({id:r.id,nome,obs,tipo,valor})}
+  comissionados.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));fecharModal();render();toast('Indicação salva.');
+})}
+
+/* ---------- Ficha da cliente ---------- */
+function abrir(id,aba){state.aberta=id;state.aba=aba||'resumo';state.senhaTexto=null;renderDrawer();document.body.style.overflow='hidden'}
+function fechar(){state.aberta=null;state.senhaTexto=null;document.getElementById('drawer').hidden=true;document.body.style.overflow=''}
+async function carregarLog(c){
+  try{c.log=await q(sb.from('historico').select('*').eq('cliente_id',c.id).order('quando',{ascending:false}).limit(200))}catch(e){c.log=[]}
+  if(state.aberta===c.id&&state.aba==='hist')renderDrawer();
+}
+function renderDrawer(){
+  const c=getC(state.aberta);if(!c)return fechar();
+  const el=document.getElementById('drawer');el.hidden=false;
+  const abas=[['resumo','Dados'],['docs','Documentos'],['financeiro','Financeiro'],['hist','Histórico']];
+  const pend=DOCS.filter(([k])=>!c.docs[k]).length;
+  let corpo='';
+  if(state.aba==='resumo'){
+    corpo=`<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button class="btn sm" onclick="editarCliente('${c.id}')">Editar dados</button></div>
+    <div class="grid2">
+      <div class="f"><label>CPF</label><div class="v">${esc(c.cpf)}</div></div>
+      <div class="f"><label>NIS</label><div class="v">${esc(c.nis)||'Não informado'}</div></div>
+      <div class="f"><label>Telefone</label><div class="v">${esc(c.tel)} <a class="btn sm wa" style="margin-left:6px" href="${wa(c.tel,`Olá, ${primeiro(c.nome)}!`)}" target="_blank" rel="noopener">WhatsApp</a></div></div>
+      <div class="f"><label>Data de nascimento</label><div class="v">${br(c.nasc)||'Não informada'}</div></div>
+      <div class="f full"><label>Endereço</label><div class="v">${esc(c.end)||'Não informado'}</div></div>
+      <div class="f"><label>Data prevista do parto</label><div class="v">${br(c.dpp)||'Não informada'}</div></div>
+      <div class="f"><label for="dParto">Data real do parto</label><input class="input" id="dParto" type="date" value="${c.parto}" onchange="setParto('${c.id}',this.value)"></div>
+    </div>
+    <div class="block"><h3>Senha do gov.br</h3>
+      ${c.temSenha?`<div class="senha"><code>${state.senhaTexto!==null?esc(state.senhaTexto):'••••••••••'}</code>
+        <button class="btn sm" onclick="verSenha(this,'${c.id}')">${state.senhaTexto!==null?'Ocultar':'Mostrar'}</button>
+        ${state.senhaTexto!==null?`<button class="btn sm" onclick="copiar('${c.id}')">Copiar</button>`:''}</div>
+        <p class="note">Guardada com criptografia. Cada visualização fica registrada no histórico.</p>`:`<p class="muted">Ainda não cadastrada. Use "Editar dados" para incluir.</p>`}
+    </div>
+    <div class="block"><h3>Vínculos</h3><div class="grid2">
+      <div class="f"><label for="dCol">Colaborador parceiro</label><select class="select" id="dCol" onchange="setVinc('${c.id}','colab',this.value)"><option value="">Nenhum</option>${colaboradores.map(x=>`<option value="${x.id}" ${c.colab===x.id?'selected':''}>${esc(x.nome)} (${x.divisao}%)</option>`).join('')}</select></div>
+      <div class="f"><label for="dInd">Indicada por</label><select class="select" id="dInd" onchange="setVinc('${c.id}','indic',this.value)"><option value="">Ninguém</option>${comissionados.map(x=>`<option value="${x.id}" ${c.indic===x.id?'selected':''}>${esc(x.nome)}</option>`).join('')}</select></div>
+      <div class="f"><label for="dHon">Honorários totais (R$)</label><input class="input" id="dHon" type="number" min="0" step="50" value="${c.honorario}" onchange="setHon('${c.id}',+this.value)"></div>
+    </div></div>`;
+  }
+  if(state.aba==='docs'){
+    corpo=`<p class="note" style="margin-bottom:12px">${pend?`${pend} documento(s) pendente(s).`:'Checklist completo.'} Marque cada documento quando a cliente entregar. O envio dos arquivos para o Google Drive será ativado na próxima etapa.</p>
+    ${DOCS.map(([k,n])=>`<div class="doc"><span class="dot ${c.docs[k]?'ok':''}"></span><div><strong style="font-weight:600">${n}</strong><small>${c.docs[k]?'Entregue em '+br(c.docs[k]):'Pendente'}</small></div>
+      <button class="btn sm ${c.docs[k]?'ghost':''}" onclick="toggleDoc(this,'${c.id}','${k}')">${c.docs[k]?'Desmarcar':'Marcar entregue'}</button></div>`).join('')}`;
+  }
+  if(state.aba==='financeiro'){
+    const col=getColab(c.colab),ind=getInd(c.indic);
+    corpo=`<div class="block" style="margin-top:0"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><h3 style="margin:0">Guia do DAS</h3><button class="btn sm" onclick="modalDas('${c.id}')">${c.das?'Editar guia':'Registrar guia'}</button></div>
+      ${c.das?`<div class="grid2">
+      <div class="f"><label>Vencimento</label><div class="v">${br(c.das.venc)}</div></div>
+      <div class="f"><label>Valor</label><div class="v">${brl(c.das.valor)}</div></div>
+      <div class="f"><label for="dPag">Quem pagou a guia</label><select class="select" id="dPag" onchange="setPagoPor('${c.id}',this.value)">${Object.entries(PAGO).map(([v,t])=>`<option value="${v}" ${c.das.pagoPor===v?'selected':''}>${t}</option>`).join('')}</select></div>
+      <div class="f"><label>Comprovante</label><div class="v">${c.docs.pagdas?'<span class="chip ok">Recebido</span>':'<span class="chip warn">Pendente</span>'}</div></div></div>
+      ${col?`<p class="note">${ajusteDAS(c)>0?`A assessoria deve ${brl(ajusteDAS(c))} a ${esc(col.nome)} no acerto final.`:ajusteDAS(c)<0?`${esc(col.nome)} deve ${brl(-ajusteDAS(c))} à assessoria no acerto final.`:'Sem ajuste de DAS no acerto.'}</p>`:''}`
+      :`<p class="muted">Guia ainda não registrada.</p>`}</div>
+    <div class="block"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><h3 style="margin:0">Parcelas de honorários</h3>${c.parcelas.filter(p=>!p.recebido).length>1?`<button class="btn sm primary" onclick="receberTudo('${c.id}')">Receber tudo de uma vez</button>`:''}</div>
+      ${c.parcelas.length?c.parcelas.map(p=>{const s=ST_P[stP(p)],r=rateio(c,p);return `<div class="prc"><span class="chip ${s[1]}">${s[0]}</span>
+        <div><strong>${p.n}ª parcela, ${brl(p.valor)}</strong><small>Recebe do INSS em ${br(p.data)}, repasse até ${br(p.limite)}</small>
+        <div class="split">${[ind?`Comissão ${brl(r.comissao)}`:'',col?`${esc(primeiro(col.nome))} ${brl(r.colab)}`:'',`Assessoria ${brl(r.assessoria)}`].filter(Boolean).join(', ')}</div></div>
+        ${p.recebido?`<small>em ${br(p.recebidoEm)}</small>`:`<button class="btn sm" onclick="receber('${c.id}',${p.n})">Recebido</button>`}</div>`}).join('')
+      :`<p class="muted">As parcelas são geradas quando o benefício é aprovado.</p><button class="btn sm" style="margin-top:8px" onclick="modalAprovar('${c.id}')">Gerar parcelas</button>`}
+    </div>
+    <div class="block"><h3>Resumo do processo</h3>
+      <div class="kv"><span>Honorários totais</span><b>${brl(c.honorario)}</b></div>
+      ${ind?`<div class="kv"><span>Comissão de ${esc(ind.nome)}</span><b>${brl(comissaoTotal(c))}${c.comissaoPaga?' (paga)':''}</b></div>`:''}
+      ${col?`<div class="kv"><span>Parte de ${esc(col.nome)} (${col.divisao}%)</span><b>${brl((c.honorario-comissaoTotal(c))*col.divisao/100)}</b></div>`:''}
+      <div class="kv"><span>Fica com a assessoria</span><b>${brl((c.honorario-comissaoTotal(c))*(col?(100-col.divisao)/100:1))}</b></div>
+    </div>`;
+  }
+  if(state.aba==='hist'){
+    if(c.log===null){corpo='<p class="loading">Carregando histórico...</p>';carregarLog(c)}
+    else corpo=`<p class="note" style="margin-bottom:8px">Registro de mudanças de etapa, documentos, recebimentos e acessos à senha.</p>${c.log.length?c.log.map(l=>`<div class="log">${esc(l.acao)}<small>${fmtQuando(l.quando)}${l.usuario?' por '+esc(l.usuario):''}</small></div>`).join(''):'<p class="muted">Nenhum registro ainda.</p>'}`;
+  }
+  el.innerHTML=`<aside class="drawer" role="dialog" aria-modal="true" aria-label="Ficha de ${esc(c.nome)}">
+    <div class="dhead">${ring(c,true)}<div><h2>${esc(c.nome)}</h2><p class="muted" style="font-size:13.5px">${c.parto?`Bebê nasceu em ${br(c.parto)}`:c.dpp?`Parto previsto para ${br(c.dpp)}`:'Sem data de parto'}</p></div>
+      <button class="btn sm ghost x" onclick="fechar()" aria-label="Fechar">Fechar</button></div>
+    <div class="dmove"><label for="dEt">Etapa</label><select class="select" id="dEt" onchange="mover('${c.id}',this.value)">${ETAPAS.map(e=>`<option value="${e.id}" ${c.etapa===e.id?'selected':''}>${e.nome}</option>`).join('')}</select></div>
+    <div class="tabs">${abas.map(([k,n])=>`<button class="tab ${state.aba===k?'on':''}" onclick="state.aba='${k}';renderDrawer()">${n}${k==='docs'&&pend?` (${pend})`:''}</button>`).join('')}</div>
+    ${corpo}</aside>`;
+}
+async function setParto(id,v){
+  const c=getC(id);
+  try{
+    if(!v){await upd(c,{parto:null});c.parto='';render();return}
+    const campos={parto:v};const vaiMover=c.etapa==='parto';
+    if(vaiMover){campos.etapa='posparto';campos.desde=today}
+    await upd(c,campos);c.parto=v;
+    await registrar(c,`Data real do parto registrada: ${br(v)}`);
+    if(vaiMover){c.etapa='posparto';c.desde=today;await registrar(c,'Etapa alterada de "Aguardando parto" para "Pós-parto" automaticamente');toast(`Parto registrado. ${primeiro(c.nome)} foi para Pós-parto.`)}
+    else toast('Data do parto registrada.');
+  }catch(e){}
+  render();
+}
+function verSenha(btn,id){ocupado(btn,async()=>{
+  const c=getC(id);
+  if(state.senhaTexto!==null){state.senhaTexto=null;renderDrawer();return}
+  const s=await q(sb.rpc('ver_senha',{p_cliente:id}));
+  state.senhaTexto=s||'';c.log=null;renderDrawer();
+})}
+async function copiar(id){
+  const c=getC(id);
+  try{await navigator.clipboard.writeText(state.senhaTexto||'');toast('Senha copiada.')}catch(e){toast('Não foi possível copiar. Selecione a senha manualmente.')}
+  try{await registrar(c,'Senha do gov.br copiada')}catch(e){}
+}
+async function setVinc(id,campo,v){
+  const c=getC(id);
+  try{
+    await upd(c,{[campo==='colab'?'colab_id':'indic_id']:v||null});c[campo]=v||null;
+    const nome=v?(campo==='colab'?getColab(v):getInd(v)).nome:'nenhum';
+    await registrar(c,`${campo==='colab'?'Colaborador parceiro':'Indicação'} alterado para: ${nome}`);toast('Vínculo atualizado.');
+  }catch(e){}
+  render();
+}
+async function setHon(id,v){const c=getC(id);try{await upd(c,{honorario:v});c.honorario=v;await registrar(c,`Honorários totais alterados para ${brl(v)}`)}catch(e){}render()}
+async function setPagoPor(id,v){const c=getC(id);try{await upd(c,{das_pago_por:v});c.das.pagoPor=v;await registrar(c,`Pagamento do DAS atribuído a: ${PAGO[v].toLowerCase()}`)}catch(e){}render()}
+function toggleDoc(btn,id,k){ocupado(btn,async()=>{
+  const c=getC(id),n=DOCS.find(d=>d[0]===k)[1];
+  const novo={...c.docs};if(novo[k])delete novo[k];else novo[k]=today;
+  await upd(c,{docs:novo});const marcou=!c.docs[k];c.docs=novo;
+  await registrar(c,marcou?`Documento marcado como entregue: ${n}`:`Documento desmarcado: ${n}`);
+  render();
+})}
+function modalDas(id){
+  const c=getC(id),d=c.das||{venc:D(10),valor:'',pagoPor:'cliente'};
+  modal(`<h2>Guia do DAS</h2><p class="sub">${esc(c.nome)}</p>
+  <div class="grid2"><div class="f"><label for="gVenc">Vencimento *</label><input class="input" id="gVenc" type="date" value="${d.venc}"></div>
+  <div class="f"><label for="gVal">Valor (R$) *</label><input class="input" id="gVal" type="number" min="0" step="0.01" value="${d.valor}"></div>
+  <div class="f full"><label for="gPag">Quem vai pagar a guia</label><select class="select" id="gPag">${Object.entries(PAGO).map(([v,t])=>`<option value="${v}" ${d.pagoPor===v?'selected':''}>${t}</option>`).join('')}</select></div></div>
+  <p class="err" id="mErr" hidden></p>
+  <div class="mact"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="salvarDas(this,'${id}')">Salvar guia</button></div>`);
+}
+function salvarDas(btn,id){ocupado(btn,async()=>{
+  const c=getC(id),venc=document.getElementById('gVenc').value,valor=+document.getElementById('gVal').value,pago=document.getElementById('gPag').value;
+  if(!venc||!valor){const e=document.getElementById('mErr');e.textContent='Informe o vencimento e o valor da guia.';e.hidden=false;return}
+  const docs={...c.docs};if(!docs.das)docs.das=today;
+  await upd(c,{das_venc:venc,das_valor:valor,das_pago_por:pago,docs});
+  const novo=!c.das;c.das={venc,valor,pagoPor:pago};c.docs=docs;
+  fecharModal();
+  await registrar(c,`${novo?'Guia do DAS registrada':'Guia do DAS alterada'}: vencimento ${br(venc)}, valor ${brl(valor)}`);
+  render();toast('Guia do DAS salva.');
+})}
+
+/* ---------- Modais ---------- */
+function modal(h){const m=document.getElementById('modal');m.innerHTML=`<div class="mbox" role="dialog" aria-modal="true">${h}</div>`;m.hidden=false;const f=m.querySelector('input,select');f&&f.focus()}
+function fecharModal(){document.getElementById('modal').hidden=true}
+function modalAprovar(id){
+  const c=getC(id);
+  modal(`<h2>Benefício aprovado</h2><p class="sub">Informe quando ${esc(primeiro(c.nome))} recebe a primeira parcela do INSS. As demais são geradas mês a mês, com prazo de repasse de 3 dias. Para pagamento único, use 1 parcela.</p>
+  <div class="grid2"><div class="f"><label for="aData">Data da 1ª parcela</label><input class="input" id="aData" type="date" value="${D(10)}"></div>
+  <div class="f"><label for="aN">Número de parcelas</label><input class="input" id="aN" type="number" min="1" max="12" value="4"></div>
+  <div class="f full"><label for="aHon">Honorários totais (R$)</label><input class="input" id="aHon" type="number" min="0" step="50" value="${c.honorario}"></div></div>
+  <div class="mact"><button class="btn ghost" onclick="fecharModal();render()">Cancelar</button><button class="btn primary" onclick="confirmarAprov(this,'${id}')">Gerar parcelas</button></div>`);
+}
+function confirmarAprov(btn,id){ocupado(btn,async()=>{
+  const c=getC(id),d=document.getElementById('aData').value,n=Math.min(12,Math.max(1,+document.getElementById('aN').value||4)),h=+document.getElementById('aHon').value||c.honorario;
+  if(!d)return;
+  const base=Math.floor(h/n*100)/100;
+  const linhas=Array.from({length:n},(_,i)=>{const data=addM(d,i);return{cliente_id:c.id,n:i+1,data,limite:addD(data,3),valor:i===n-1?Math.round((h-base*(n-1))*100)/100:base}});
+  const rows=await q(sb.from('parcelas').insert(linhas).select());
+  const de=etapa(c.etapa).nome;
+  await upd(c,{honorario:h,etapa:'aprovado',desde:today});
+  c.honorario=h;c.parcelas=rows.map(deParc).sort((a,b)=>a.n-b.n);c.etapa='aprovado';c.desde=today;
+  fecharModal();
+  await registrar(c,`Benefício aprovado. ${n} parcela(s) gerada(s) a partir de ${br(d)}. Etapa alterada de "${de}" para "Aprovado, em cobrança"`);
+  render();toast(`${n} parcela(s) gerada(s) para ${primeiro(c.nome)}.`);
+})}
+function formCliente(c){
+  const e=!!c;c=c||{};
+  return `<h2>${e?'Editar cliente':'Nova cliente'}</h2><p class="sub">${e?'Atualize os dados cadastrais.':'Campos com * são obrigatórios.'}</p>
+  <div class="grid2">
+    <div class="f full"><label for="nNome">Nome completo *</label><input class="input" id="nNome" autocomplete="off" value="${esc(c.nome||'')}" oninput="up(this)"></div>
+    <div class="f"><label for="nCpf">CPF *</label><input class="input" id="nCpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" value="${esc(c.cpf||'')}" oninput="masc(this,'cpf')"></div>
+    <div class="f"><label for="nNis">NIS</label><input class="input" id="nNis" inputmode="numeric" placeholder="000.00000.00-0" maxlength="14" value="${esc(c.nis||'')}" oninput="masc(this,'nis')"></div>
+    <div class="f"><label for="nTel">Telefone ou WhatsApp *</label><input class="input" id="nTel" inputmode="tel" placeholder="(88) 99999-9999" maxlength="15" value="${esc(c.tel||'')}" oninput="masc(this,'tel')"></div>
+    <div class="f"><label for="nNasc">Data de nascimento</label><input class="input" id="nNasc" type="date" value="${c.nasc||''}"></div>
+    <div class="f full"><label for="nEnd">Endereço completo</label><input class="input" id="nEnd" value="${esc(c.end||'')}"></div>
+    <div class="f"><label for="nDpp">Data prevista do parto</label><input class="input" id="nDpp" type="date" value="${c.dpp||''}"></div>
+    <div class="f"><label for="nSenha">${e?'Nova senha do gov.br':'Senha do gov.br'}</label><input class="input" id="nSenha" type="password" autocomplete="new-password" placeholder="${e?'Deixe em branco para manter':''}"></div>
+    ${e?'':`<div class="f"><label for="nCol">Colaborador parceiro</label><select class="select" id="nCol"><option value="">Nenhum</option>${colaboradores.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select></div>
+    <div class="f"><label for="nInd">Indicada por</label><select class="select" id="nInd"><option value="">Ninguém</option>${comissionados.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select></div>`}
+  </div>
+  ${e?'':`<label class="check" style="margin-top:16px"><input type="checkbox" id="nLgpd"><span>A cliente autorizou o uso e o armazenamento dos seus dados pessoais para a prestação do serviço, conforme a LGPD.</span></label>`}
+  <p class="err" id="nErr" hidden></p>
+  <div class="mact" style="justify-content:space-between">${e?`<button class="btn sm danger" onclick="excluirCliente(this,'${c.id}')">Excluir cliente</button>`:'<span></span>'}
+    <div style="display:flex;gap:8px"><button class="btn ghost" onclick="fecharModal()">Cancelar</button><button class="btn primary" onclick="salvarCliente(this,'${e?c.id:''}')">${e?'Salvar alterações':'Cadastrar cliente'}</button></div></div>`;
+}
+function novaCliente(){modal(formCliente(null))}
+function editarCliente(id){modal(formCliente(getC(id)))}
+function salvarCliente(btn,id){ocupado(btn,async()=>{
+  const g=i=>{const el=document.getElementById(i);return el?el.value.trim():''};
+  const err=document.getElementById('nErr');const erro=m=>{err.textContent=m;err.hidden=false};
+  const falta=[!g('nNome')&&'nome',!g('nCpf')&&'CPF',!g('nTel')&&'telefone'].filter(Boolean);
+  if(falta.length)return erro(`Preencha ${falta.join(', ')} para continuar.`);
+  if(so(g('nCpf')).length!==11)return erro('O CPF precisa ter 11 números.');
+  if(g('nNis')&&so(g('nNis')).length!==11)return erro('O NIS precisa ter 11 números.');
+  if(so(g('nTel')).length<10)return erro('Informe o telefone com DDD.');
+  if(!id&&!document.getElementById('nLgpd').checked)return erro('Marque a autorização da LGPD para cadastrar a cliente.');
+  const obj={nome:UP(g('nNome')),cpf:mascCPF(g('nCpf')),nis:g('nNis')?mascNIS(g('nNis')):null,tel:mascTel(g('nTel')),endereco:g('nEnd')||null,nasc:g('nNasc')||null,dpp:g('nDpp')||null};
+  const senha=document.getElementById('nSenha').value;
+  let c;
+  if(id){
+    const r=await q(sb.from('clientes').update(obj).eq('id',id).select(COLS).single());
+    const antigo=getC(id);c=deDB(r,antigo);clientes[clientes.indexOf(antigo)]=c;
+    await registrar(c,'Dados cadastrais atualizados');
+  }else{
+    Object.assign(obj,{etapa:'lead',colab_id:g('nCol')||null,indic_id:g('nInd')||null});
+    const r=await q(sb.from('clientes').insert(obj).select(COLS).single());
+    c=deDB(r);clientes.push(c);
+    await registrar(c,'Cliente cadastrada com autorização LGPD');
+  }
+  if(senha){await q(sb.rpc('salvar_senha',{p_cliente:c.id,p_senha:senha}));c.temSenha=true}
+  c.log=null;ordenar();fecharModal();render();abrir(c.id);
+  toast(id?'Dados atualizados.':'Cliente cadastrada.');
+})}
+function excluirCliente(btn,id){
+  if(!btn.dataset.ok){btn.dataset.ok='1';btn.textContent='Clique de novo para confirmar';setTimeout(()=>{if(btn.isConnected){delete btn.dataset.ok;btn.textContent='Excluir cliente'}},4000);return}
+  ocupado(btn,async()=>{
+    await q(sb.from('clientes').delete().eq('id',id));
+    clientes=clientes.filter(c=>c.id!==id);fecharModal();fechar();render();toast('Cliente excluída.');
+  });
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!document.getElementById('modal').hidden)fecharModal();else if(state.aberta)fechar()}});
+
+/* ---------- Tema claro / escuro ---------- */
+const TEMAS=['auto','light','dark'];
+const TEMA_INFO={
+  auto:['Tema automático','<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>'],
+  light:['Tema claro','<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>'],
+  dark:['Tema escuro','<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>']};
+let tema='auto';
+try{tema=localStorage.getItem('ninho-tema')||'auto'}catch(e){}
+function aplicarTema(){
+  if(tema==='auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',tema);
+  const [rot,ico]=TEMA_INFO[tema],b=document.getElementById('themeBtn');
+  b.innerHTML=`${ico}<span>${rot}</span>`;b.title=`${rot}. Clique para trocar.`;b.setAttribute('aria-label',`${rot}. Clique para trocar.`);
+}
+function trocarTema(){
+  tema=TEMAS[(TEMAS.indexOf(tema)+1)%TEMAS.length];
+  try{localStorage.setItem('ninho-tema',tema)}catch(e){}
+  aplicarTema();toast(TEMA_INFO[tema][0]+(tema==='auto'?', segue o seu aparelho.':' ativado.'));
+}
+aplicarTema();
+
+/* ---------- Acesso (login) ---------- */
+const VIEWS={hoje:renderHoje,funil:renderFunil,clientes:renderClientes,financeiro:renderFin,parceiros:renderParceiros};
+function tela(qual){
+  document.getElementById('setup').hidden=qual!=='setup';
+  document.getElementById('login').hidden=qual!=='login';
+  document.getElementById('app').hidden=qual!=='app';
+}
+async function entrar(session){
+  usuario=session.user.email||'';
+  document.getElementById('userEmail').textContent=usuario;
+  tela('app');
+  document.getElementById('main').innerHTML='<p class="loading">Carregando os dados...</p>';
+  try{await carregar();render()}
+  catch(e){document.getElementById('main').innerHTML=`<div class="panel"><div class="empty"><strong>Não foi possível carregar os dados</strong>Verifique a conexão e se o banco foi configurado.<div style="margin-top:12px"><button class="btn primary" onclick="location.reload()">Tentar de novo</button></div></div></div>`}
+}
+function fazerLogin(btn){ocupado(btn,async()=>{
+  const email=document.getElementById('lEmail').value.trim(),senha=document.getElementById('lSenha').value;
+  const err=document.getElementById('lErr');err.hidden=true;
+  if(!email||!senha){err.textContent='Informe e-mail e senha.';err.hidden=false;return}
+  const{data,error}=await sb.auth.signInWithPassword({email,password:senha});
+  if(error){err.textContent=error.message.includes('Invalid')?'E-mail ou senha incorretos.':'Não foi possível entrar: '+error.message;err.hidden=false;return}
+  document.getElementById('lSenha').value='';
+  entrar(data.session);
+})}
+async function sair(){
+  try{await sb.auth.signOut()}catch(e){}
+  clientes=[];colaboradores=[];comissionados=[];pronto=false;fechar();fecharModal();tela('login');
+}
+async function iniciar(){
+  if(!configurado){tela('setup');return}
+  const{data:{session}}=await sb.auth.getSession();
+  if(session)entrar(session);else tela('login');
+  sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'&&pronto){pronto=false;tela('login')}});
+}
+iniciar();
+
+</script>
+</body>
+</html>
