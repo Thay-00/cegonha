@@ -803,8 +803,8 @@ function salvarInd(btn,id){ocupado(btn,async()=>{
 })}
 
 /* ---------- Ficha da cliente ---------- */
-function abrir(id,aba){state.aberta=id;state.aba=aba||'resumo';state.senhaTexto=null;renderDrawer();document.body.style.overflow='hidden'}
-function fechar(){state.aberta=null;state.senhaTexto=null;document.getElementById('drawer').hidden=true;document.body.style.overflow=''}
+function abrir(id,aba){state.aberta=id;state.aba=aba||'resumo';state.senhaTexto=null;state.senhaCache=null;renderDrawer();document.body.style.overflow='hidden'}
+function fechar(){state.aberta=null;state.senhaTexto=null;state.senhaCache=null;document.getElementById('drawer').hidden=true;document.body.style.overflow=''}
 async function carregarLog(c){
   try{c.log=await q(sb.from('historico').select('*').eq('cliente_id',c.id).order('quando',{ascending:false}).limit(200))}catch(e){c.log=[]}
   if(state.aberta===c.id&&state.aba==='hist')renderDrawer();
@@ -826,12 +826,7 @@ function renderDrawer(){
       <div class="f"><label>Data prevista do parto</label><div class="v">${br(c.dpp)||'Não informada'}</div></div>
       <div class="f"><label for="dParto">Data real do parto</label><input class="input" id="dParto" type="date" value="${c.parto}" onchange="setParto('${c.id}',this.value)"></div>
     </div>
-    <div class="block"><h3>Senha do gov.br</h3>
-      ${c.temSenha?`<div class="senha"><code>${state.senhaTexto!==null?esc(state.senhaTexto):'••••••••••'}</code>
-        <button class="btn sm" onclick="verSenha(this,'${c.id}')">${state.senhaTexto!==null?'Ocultar':'Mostrar'}</button>
-        <button class="btn sm" onclick="copiar(this,'${c.id}')">Copiar</button></div>
-        <p class="note">Guardada com criptografia. Cada visualização e cópia fica registrada no histórico.</p>`:`<p class="muted">Ainda não cadastrada. Use "Editar dados" para incluir.</p>`}
-    </div>
+    <div class="block"><h3>Senha do gov.br</h3><div id="senhaBox">${htmlSenha(c)}</div></div>
     <div class="block"><h3>Vínculos</h3><div class="grid2">
       <div class="f"><label for="dCol">Colaborador parceiro</label><select class="select" id="dCol" onchange="setVinc('${c.id}','colab',this.value)"><option value="">Nenhum</option>${colaboradores.map(x=>`<option value="${x.id}" ${c.colab===x.id?'selected':''}>${esc(x.nome)} (${x.divisao}%)</option>`).join('')}</select></div>
       <div class="f"><label for="dInd">Indicada por</label><select class="select" id="dInd" onchange="setVinc('${c.id}','indic',this.value)"><option value="">Ninguém</option>${comissionados.map(x=>`<option value="${x.id}" ${c.indic===x.id?'selected':''}>${esc(x.nome)}</option>`).join('')}</select></div>
@@ -891,16 +886,33 @@ async function setParto(id,v){
   }catch(e){}
   render();
 }
-function verSenha(btn,id){ocupado(btn,async()=>{
+function htmlSenha(c){
+  if(!c.temSenha)return `<p class="muted">Ainda não cadastrada. Use "Editar dados" para incluir.</p>`;
+  const vis=state.senhaTexto!==null;
+  return `<div class="senha"><code>${vis?esc(state.senhaTexto):'••••••••••'}</code>
+    <button class="btn sm" onclick="verSenha(this,'${c.id}')">${vis?'Ocultar':'Mostrar'}</button>
+    <button class="btn sm" onclick="copiar(this,'${c.id}')">Copiar</button></div>
+    <p class="note">Guardada com criptografia. A visualização e a cópia ficam registradas no histórico.</p>`;
+}
+/* Atualiza só o quadro da senha, sem redesenhar a ficha inteira */
+function pintaSenha(c){const b=document.getElementById('senhaBox');if(b)b.innerHTML=htmlSenha(c);else renderDrawer()}
+function verSenha(btn,id){
   const c=getC(id);
-  if(state.senhaTexto!==null){state.senhaTexto=null;renderDrawer();return}
-  const s=await q(sb.rpc('ver_senha',{p_cliente:id}));
-  state.senhaTexto=s||'';c.log=null;renderDrawer();
-})}
+  // Ocultar é instantâneo, não consulta o banco
+  if(state.senhaTexto!==null){state.senhaTexto=null;pintaSenha(c);return}
+  // Já buscada nesta ficha: mostra na hora, sem nova consulta
+  if(state.senhaCache!=null){state.senhaTexto=state.senhaCache;pintaSenha(c);return}
+  ocupado(btn,async()=>{
+    btn.textContent='Carregando...';
+    try{state.senhaCache=(await q(sb.rpc('ver_senha',{p_cliente:id})))||''}
+    catch(e){btn.textContent='Mostrar';throw e}
+    state.senhaTexto=state.senhaCache;c.log=null;pintaSenha(c);
+  });
+}
 function copiar(btn,id){ocupado(btn,async()=>{
   const c=getC(id);
   // Se a senha ainda não foi revelada, busca no banco sem mostrar na tela
-  const busca=state.senhaTexto!==null?Promise.resolve(state.senhaTexto):q(sb.rpc('ver_senha',{p_cliente:id})).then(s=>s||'');
+  const busca=state.senhaCache!=null?Promise.resolve(state.senhaCache):q(sb.rpc('ver_senha',{p_cliente:id})).then(s=>{state.senhaCache=s||'';return state.senhaCache});
   let ok=false;
   try{
     if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
